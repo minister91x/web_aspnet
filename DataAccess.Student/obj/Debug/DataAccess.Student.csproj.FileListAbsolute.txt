@@ -1,0 +1,6 @@
+C:\Users\ad\source\repos\WebApplication2\DataAccess.Student\bin\Debug\DataAccess.Student.dll
+C:\Users\ad\source\repos\WebApplication2\DataAccess.Student\bin\Debug\DataAccess.Student.pdb
+C:\Users\ad\source\repos\WebApplication2\DataAccess.Student\obj\Debug\DataAccess.Student.csprojAssemblyReference.cache
+C:\Users\ad\source\repos\WebApplication2\DataAccess.Student\obj\Debug\DataAccess.Student.csproj.CoreCompileInputs.cache
+C:\Users\ad\source\repos\WebApplication2\DataAccess.Student\obj\Debug\DataAccess.Student.dll
+C:\Users\ad\source\repos\WebApplication2\DataAccess.Student\obj\Debug\DataAccess.Student.pdb

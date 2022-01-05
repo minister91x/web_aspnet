@@ -1,0 +1,27 @@
+﻿using DataAccess.Student.DAO;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DataAccess.Student.DAOImpl
+{
+    public class StudentImpl : IStudent
+    {
+        public int Student_Delele(int Id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int Student_Insert(StudentDTO stu)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int Student_Update(StudentDTO stu)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}

@@ -1,0 +1,86 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+@model List<DataAccess.Student.StudentDTO>
+<div class="jumbotron">
+    <h1>ASP.NET</h1>
+
+</div>
+
+
+<div class="form-group">
+    <label for="exampleInputEmail1">UserName</label>
+    <input type="email" class="form-control" id="txtUserName" aria-describedby="emailHelp" placeholder="Enter UserName">
+</div>
+<div class="form-group">
+    <label for="exampleInputPassword1">Password</label>
+    <input type="password" class="form-control" id="txtPassword" placeholder="Password">
+</div>
+
+<button type="button" id="btn_Login" class="btn btn-primary">Login</button>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Detail</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Count > 0)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ID</td>
+                    <td>@item.Name</td>
+                    <td><a href="/Home/Detail?ID=@item.ID&Name=@item.Name">Detail</a></td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+<script>
+    $(document).ready(function(){
+
+        $("#btn_Login").click(function () {
+
+            var username = $("#txtUserName").val();
+            var password = $("#txtPassword").val();
+
+            if (username == null || username == "") {
+                alert("Vui lòng nhập UserName");
+                return;
+            }
+            if (password == null || password == "") {
+                alert("Vui lòng nhập password");
+                return;
+            }
+
+            var data = {
+                UserName: username,
+                Password: password
+            };
+
+            $.ajax({
+                type: "GET", // GET / POST / DELETE
+                cache: false,
+                url: "/Home/Login",
+                data: data,    // multiple data sent using ajax
+                success: function (data)
+                {
+                    var res = data.ResponseCode;
+                    var des = data.Description;
+                    alert(des);
+                }
+            });
+
+
+        });
+
+    });
+
+
+</script>

@@ -19,31 +19,13 @@
 </div>
 
 <button type="button" id="btn_Login" class="btn btn-primary">Login</button>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Name</th>
-            <th scope="col">Detail</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model != null && Model.Count > 0)
-        {
-            foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.ID</td>
-                    <td>@item.Name</td>
-                    <td><a href="/Home/Detail?ID=@item.ID&Name=@item.Name">Detail</a></td>
-                </tr>
-            }
-        }
-    </tbody>
-</table>
+<button type="button" id="btn_InsertUpdate" class="btn btn-success">Thêm mới</button>
+@Html.Action("DemoPartialView","Home")
 <script>
-    $(document).ready(function(){
+    $(document).ready(function () {
+        $("#btn_InsertUpdate").click(function () {
+            window.location.href = "/Home/Detail";
+        });
 
         $("#btn_Login").click(function () {
 

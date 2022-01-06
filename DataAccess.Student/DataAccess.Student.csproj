@@ -43,10 +43,13 @@
   <ItemGroup>
     <Compile Include="ConnectDB.cs" />
     <Compile Include="DAOImpl\AccountImpl.cs" />
+    <Compile Include="DAOImpl\StudentClassDAOImpl.cs" />
     <Compile Include="DAOImpl\StudentImpl.cs" />
     <Compile Include="DAO\IAccount.cs" />
     <Compile Include="DAO\IStudent.cs" />
+    <Compile Include="DAO\IStudentClassDAO.cs" />
     <Compile Include="DTO\AccountDTO.cs" />
+    <Compile Include="DTO\StudentClassDTO.cs" />
     <Compile Include="DTO\StudentDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

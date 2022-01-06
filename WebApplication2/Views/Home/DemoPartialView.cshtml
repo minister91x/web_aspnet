@@ -1,1 +1,57 @@
-﻿Header Change
+﻿@model List<DataAccess.Student.DTO.StudentClassDTO>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Mã Lớp</th>
+            <th scope="col">Tên lớp</th>
+            <th scope="col">Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Count > 0)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.MaLop</td>
+                    <td>@item.TenLOP</td>
+                    <td>
+                        <a href="/Home/Detail?MalopInput=@item.MaLop"><i class="fa fa-eye">Sửa</i> | </a>
+                        <a onclick="StudentClassDelete('@item.MaLop')"><i class="fa fa-trash">Xóa</i> </a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+<script>
+    $(document).ready(function () {
+
+    });
+
+    function StudentClassDelete(malop) {
+        var result = confirm("Bạn có chắc chắn muốn xóa mã lớp :" + malop);
+        if (result) {
+
+            var data = {
+                MalopInput: malop,
+            };
+
+            $.ajax({
+                type: "GET", // GET / POST / DELETE
+                cache: false,
+                url: "/Home/StudentClassDelete",
+                data: data,  
+                success: function (data) {
+                    var res = data.ResponseCode;
+                    var des = data.Description;
+                    alert(des);
+                    if (res > 0) {
+                        setTimeout(function () { window.location.href = "/Home/Index"; }, 1000);
+                    }
+                }
+            });
+        }
+    }
+</script>

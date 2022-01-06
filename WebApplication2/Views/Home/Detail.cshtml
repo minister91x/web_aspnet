@@ -1,15 +1,62 @@
 ﻿
+@model DataAccess.Student.DTO.StudentClassDTO
 @{
     ViewBag.Title = "Detail";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var text = Model.MaLop != null ? "Cập nhật lớp" : "Thêm lớp";
+    var isupdate = Model.MaLop != null ? 1 : 0;
 }
-@model DataAccess.Student.StudentDTO
-<h2>Detail</h2>
-@*@ViewBag.ID;
-@ViewBag.Name;*@
+<h2>@text</h2>
+<div class="form-group">
+    <label for="exampleInputEmail1">Mã lớp</label>
+    <input hidden id="txtIsupdate" value="@isupdate" />
+    <input type="email" class="form-control" id="txtMalop" value="@Model.MaLop" @(!string.IsNullOrEmpty(Model.MaLop) ? "disabled" : "")>
+</div>
+<div class="form-group">
+    <label for="exampleInputPassword1">Tên lớp</label>
+    <input type="text" class="form-control" id="txtTenLop" value="@Model.TenLOP">
+</div>
 
-@Model.ID
-<br />
-@Model.Name;
+<div class="form-group">
+    <button class="btn btn-success" onclick="BtnInsertUpdate()">@text</button>
+</div>
+<script>
+    $(document).ready(function () {
 
+    });
+
+    function BtnInsertUpdate() {
+
+        var malop = $("#txtMalop").val();
+        var tenlop = $("#txtTenLop").val();
+
+        if (malop == null || malop == "") {
+            alert("Vui lòng nhập mã lớp");
+            return;
+        }
+        if (tenlop == null || tenlop == "") {
+            alert("Vui lòng nhập tên lớp");
+            return;
+        }
+
+        var data = {
+            IsUpdate: $("#txtIsupdate").val(),
+            Malop: malop,
+            TenLop: tenlop
+        };
+
+        $.ajax({
+            type: "GET", // GET / POST / DELETE
+            cache: false,
+            url: "/Home/StudentClassInsertUpdate",
+            data: data,    // multiple data sent using ajax
+            success: function (data) {
+                var res = data.ResponseCode;
+                var des = data.Description;
+                alert(des);
+            }
+        });
+    }
+
+</script>
 

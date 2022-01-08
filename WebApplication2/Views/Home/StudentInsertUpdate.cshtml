@@ -1,0 +1,64 @@
+﻿
+@{
+    ViewBag.Title = "StudentInsertUpdate";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var lstClass = ViewBag.lstClass != null ? (List<DataAccess.Student.DTO.StudentClassDTO>)ViewBag.lstClass : new List<DataAccess.Student.DTO.StudentClassDTO>();
+}
+
+<div class="form-group">
+    <label for="exampleInputEmail1">Mã học sinh</label>
+    <input type="email" class="form-control" id="txt" aria-describedby="emailHelp" placeholder="Enter UserName">
+</div>
+<div class="form-group">
+    <label for="exampleInputPassword1">Tên học sinh</label>
+    <input type="password" class="form-control" id="txtPassword" placeholder="Password">
+</div>
+<div class="form-group">
+    <label for="exampleInputPassword1">Lớp cach1</label>
+    <select class="form-control" id="ddlClassID_Cach1">
+        @if (lstClass != null && lstClass.Count > 0)
+            {
+                foreach (var item in lstClass)
+                {
+                    <option value="@item.MaLop">@item.TenLOP</option>
+                }
+
+            }
+    </select>
+</div>
+<div class="form-group">
+    <label for="exampleInputPassword1">Lớp Cách 2 </label>
+    <select class="form-control" id="ddlClassID">
+    </select>
+</div>
+<script>
+    $(document).ready(function () {
+        LoadDataToCombobox();
+    });
+
+    function LoadDataToCombobox() {
+        var data = {
+        };
+
+        $.ajax({
+            type: "GET", // GET / POST / DELETE
+            cache: false,
+            url: "/Home/LoadClassData",
+            data: data,
+            success: function (data) {
+                var html = "";
+                if (data != null) {
+                    console.log(data);
+                    $.each(data, function (index, item) {
+                        html += "<option value='" + item.MaLop + "'>" + item.TenLOP + "</option>";
+                    });
+
+                    $("#ddlClassID").append(html);
+
+                }
+            }
+        });
+    }
+
+</script>

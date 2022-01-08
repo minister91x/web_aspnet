@@ -41,16 +41,23 @@ namespace DataAccess.Student.DAOImpl
             return model;
         }
 
-        public List<StudentClassDTO> StudentClass_GetList()
+        public ListStudentClassResponse StudentClass_GetList(string MaLopInput, int CurrPage, int RecordPerPage)
         {
+            var model = new ListStudentClassResponse();
             var list = new List<StudentClassDTO>();
+            var totalRecord = 0;
             try
             {
                 var sqlconn = ConnectDB.GetSqlConnection();
                 //ALT +F10
                 SqlCommand cmd = new SqlCommand("SP_ClassGetList", sqlconn);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                //cmd.CommandTimeout = 120;
 
+                cmd.Parameters.AddWithValue("@_MaLop", MaLopInput);
+                cmd.Parameters.AddWithValue("@_CurrPage", CurrPage);
+                cmd.Parameters.AddWithValue("@_RecordPerPage", RecordPerPage);
+                cmd.Parameters.Add("@_TotalRecord", System.Data.SqlDbType.Int).Direction = System.Data.ParameterDirection.Output;
                 var read = cmd.ExecuteReader();
                 while (read.Read())
                 {
@@ -60,6 +67,16 @@ namespace DataAccess.Student.DAOImpl
                         TenLOP = read["TenLOP"].ToString(),
                     });
                 }
+
+                if (!read.IsClosed)
+                {
+                    read.Close();
+                }
+
+                totalRecord = cmd.Parameters["@_TotalRecord"].Value != null ? Convert.ToInt32(cmd.Parameters["@_TotalRecord"].Value) : 0;
+
+                model.listClass = list;
+                model.TotalRecord = totalRecord;
             }
             catch (Exception)
             {
@@ -67,7 +84,7 @@ namespace DataAccess.Student.DAOImpl
                 throw;
             }
 
-            return list;
+            return model;
         }
 
         public int StudentClass_InsertUpdate(int IsUdpate, string MaLopInput, string stTenLOPInput)

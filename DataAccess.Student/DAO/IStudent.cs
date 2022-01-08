@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataAccess.Student.DTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

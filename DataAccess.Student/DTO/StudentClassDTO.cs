@@ -11,4 +11,11 @@ namespace DataAccess.Student.DTO
         public string MaLop { get; set; }
         public string TenLOP { get; set; }
     }
+
+    public class ListStudentClassResponse
+    {
+        public List<StudentClassDTO> listClass { get; set; }
+        public int TotalRecord { get; set; }
+        //public int TotalAmount { get; set; }
+    }
 }

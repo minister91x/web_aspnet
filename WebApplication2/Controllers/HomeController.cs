@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataAccess.Student.DTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -11,12 +12,7 @@ namespace WebApplication2.Controllers
     {
         public ActionResult Index()
         {
-            var student = new List<DataAccess.Student.StudentDTO>();
-            for (int i = 0; i < 10; i++)
-            {
-                student.Add(new DataAccess.Student.StudentDTO { ID = i + 1, Name = "Name" + i });
-            }
-            return View(student);
+            return View();
         }
 
         public ActionResult About()
@@ -34,13 +30,24 @@ namespace WebApplication2.Controllers
             return View();
         }
 
-        public ActionResult DemoPartialView()
+        #region Class
+        public ActionResult DemoPartialView(string MaLopInPut, int CurrentPage, int RecordPerPage)
         {
             // Model để truyền dữ liệu ra ngoài vieww
             var model = new List<DataAccess.Student.DTO.StudentClassDTO>();
+            var TotalPage = 1;
             try
             {
-                model = new DataAccess.Student.DAOImpl.StudentClassDAOImpl().StudentClass_GetList();
+                var modelresponse = new DataAccess.Student.DAOImpl.StudentClassDAOImpl().StudentClass_GetList(MaLopInPut, CurrentPage, RecordPerPage);
+                if (modelresponse.TotalRecord > 0)
+                {
+                    model = modelresponse.listClass;
+                    TotalPage = modelresponse.TotalRecord % RecordPerPage == 0 ? modelresponse.TotalRecord / RecordPerPage : (modelresponse.TotalRecord / RecordPerPage) + 1;
+                }
+
+                ViewBag.CurrentPage = CurrentPage;
+                ViewBag.PageSize = RecordPerPage;
+                ViewBag.TotalPage = TotalPage;
             }
             catch (Exception ex)
             {
@@ -192,5 +199,55 @@ namespace WebApplication2.Controllers
                 return Json(returnData, JsonRequestBehavior.AllowGet);
             }
         }
+
+        #endregion
+
+
+        #region ManagerStudent
+
+        // Comment thì dùng phím CTRL+K+C 
+        // Uncomment thì dùng CTRL+K+D 
+        public ActionResult ManagerStudent()
+        {
+            return View();
+        }
+
+
+        public ActionResult StudentInsertUpdate(int? StudentID)
+        {
+            var model = new DataAccess.Student.DTO.StudentDTO();
+            try
+            {
+                var lstClass = new DataAccess.Student.DAOImpl.StudentClassDAOImpl().StudentClass_GetList(string.Empty, 1, 10000);
+                ViewBag.lstClass = lstClass.listClass;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+            return View(model);
+        }
+
+        public JsonResult LoadClassData()
+        {
+            var listClass = new List<StudentClassDTO>();
+            try
+            {
+                var result = new DataAccess.Student.DAOImpl.StudentClassDAOImpl().StudentClass_GetList(string.Empty, 1, 10000);
+                listClass = result.listClass;
+
+                
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+            return Json(listClass, JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion
     }
 }

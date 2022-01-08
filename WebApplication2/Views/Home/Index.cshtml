@@ -2,7 +2,7 @@
     ViewBag.Title = "Home Page";
 }
 
-@model List<DataAccess.Student.StudentDTO>
+@model List<DataAccess.Student.DTO.StudentDTO>
 <div class="jumbotron">
     <h1>ASP.NET</h1>
 
@@ -20,11 +20,28 @@
 
 <button type="button" id="btn_Login" class="btn btn-primary">Login</button>
 <button type="button" id="btn_InsertUpdate" class="btn btn-success">Thêm mới</button>
-@Html.Action("DemoPartialView","Home")
+
+
+<div class="form-group">
+    <label for="exampleInputEmail1">Mã lớp</label>
+    <input type="email" class="form-control" id="txtMaLop" aria-describedby="emailHelp" placeholder="Enter UserName">
+</div>
+
+<button type="button" id="btn_SearchClass" class="btn btn-primary">Tìm kiếm</button>
+
+<div id="listClassPartial">
+    @Html.Action("DemoPartialView", "Home", new { MaLopInPut = "", CurrentPage = 1, RecordPerPage = 2 })
+</div>
+
 <script>
     $(document).ready(function () {
         $("#btn_InsertUpdate").click(function () {
             window.location.href = "/Home/Detail";
+        });
+
+        $("#btn_SearchClass").click(function () {
+            GetListClass();
+
         });
 
         $("#btn_Login").click(function () {
@@ -51,8 +68,7 @@
                 cache: false,
                 url: "/Home/Login",
                 data: data,    // multiple data sent using ajax
-                success: function (data)
-                {
+                success: function (data) {
                     var res = data.ResponseCode;
                     var des = data.Description;
                     alert(des);
@@ -64,5 +80,22 @@
 
     });
 
+    function GetListClass() {
+        var data = {
+            MalopInput: $("#txtMaLop").val(),
+            CurrentPage: 1,
+            RecordPerPage: 2
+        };
+
+        $.ajax({
+            type: "GET", // GET / POST / DELETE
+            cache: false,
+            url: "/Home/DemoPartialView",
+            data: data,
+            success: function (data) {
+                $("#listClassPartial").html(data);
+            }
+        });
+    }
 
 </script>

@@ -1,14 +1,22 @@
 ﻿@model List<DataAccess.Student.DTO.StudentClassDTO>
-
-<table class="table">
+<style>
+    .paginate_button .active {
+        background-color: red;
+    }
+</style>
+<table class="table" id="table_id">
     <thead>
         <tr>
             <th scope="col">Mã Lớp</th>
             <th scope="col">Tên lớp</th>
-            <th scope="col">Hành động</th>
+            <th scope="col">Hành động </th>
+            <th scope="col">
+                <input type="checkbox" id="chkDeleteAll" />
+                <a onclick="DeleteAll()">Xóa</a>
+            </th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="table_body">
         @if (Model != null && Model.Count > 0)
         {
             foreach (var item in Model)
@@ -18,17 +26,120 @@
                     <td>@item.TenLOP</td>
                     <td>
                         <a href="/Home/Detail?MalopInput=@item.MaLop"><i class="fa fa-eye">Sửa</i> | </a>
-                        <a onclick="StudentClassDelete('@item.MaLop')"><i class="fa fa-trash">Xóa</i> </a>
+                        <a onclick="StudentClassDelete('@item.MaLop')"><i class="fa fa-trash">Xóa</i> </a> |
+                    </td>
+                    <td>
+                        <input type="checkbox" id="chk_@item.MaLop.Trim()" />
                     </td>
                 </tr>
             }
         }
     </tbody>
 </table>
+<div id="pager"></div>
 <script>
-    $(document).ready(function () {
+    //$(document).ready(function () {
+    //    //$('#table_id').DataTable();
 
+    //});
+
+       var pageOnSize = '@ViewBag.PageSize';
+    var currentPage = '@ViewBag.CurrentPage';
+    $(document).ready(function () {
+        //$('#example').DataTable({
+        //    dom: 'Bfrtip',
+        //    buttons: [
+        //        'copy', 'csv', 'excel', 'pdf', 'print'
+        //    ]
+        //});
+
+
+        $("#pager").pagerHistory({
+            pagenumber: currentPage,
+            pagecount: Math.ceil('@ViewBag.TotalPage'),
+            buttonClickCallback: function (page) { bindDataRequest(page); }
+        });
+
+
+        $("#chkDeleteAll").click(function () {
+            var ischeck = $("#chkDeleteAll").is(":checked");
+            var checkbox_body = $('#table_body input[type="checkbox"]');
+            //Kiểm tra xem checkbox all đag được check hay uncheck
+            if (ischeck) {
+                //Nếu mà check thì set tất cả các checkbox trong table là checked
+                $.each(checkbox_body, function (index, item) {
+                    var id = $(this).id;// lấy tất cả các checkbox trong table
+                    console.log(item.id);
+                    $("#" + item.id.trim()).prop("checked", true);
+                });
+
+            } else {
+                // nếu mà unchecked thì bỏ check tất cả item trong table
+                $.each(checkbox_body, function (index, item) {
+                    var id = $(this).id;// lấy tất cả các checkbox trong table
+                    console.log(item.id);
+                    $("#" + item.id.trim()).prop("checked", false);
+                });
+            }
+
+        });
     });
+
+    function DeleteAll() {
+        var lstMalop = [];
+        var ischeck = $("#chkDeleteAll").is(":checked");
+        if (!ischeck) {
+            alert("vui lòng tick all");
+            return;
+        }
+
+        var checkbox_body = $('#table_body input[type="checkbox"]');
+        $.each(checkbox_body, function (index, item) {
+            var id = $(this).id;// lấy tất cả các checkbox trong table
+            console.log(item.id);
+            var item_ischeck = $("#" + item.id.trim()).is(":checked");
+            if (item_ischeck) {
+                lstMalop.push(item.id.trim().split('_')[1]);
+            }
+
+        });
+
+        $.each(lstMalop, function (index, malop) {
+
+            var data = {
+                MalopInput: malop,
+            };
+
+            $.ajax({
+                type: "GET", // GET / POST / DELETE
+                cache: false,
+                url: "/Home/StudentClassDelete",
+                data: data,
+                success: function (data) {
+
+                }
+            });
+        });
+
+    }
+
+    function bindDataRequest(page) {
+        var data = {
+            MalopInput: $("#txtMaLop").val(),
+            CurrentPage: page,
+            RecordPerPage:'@ViewBag.PageSize'
+        };
+
+        $.ajax({
+            type: "GET", // GET / POST / DELETE
+            cache: false,
+            url: "/Home/DemoPartialView",
+            data: data,
+            success: function (data) {
+                $("#listClassPartial").html(data);
+            }
+        });
+    }
 
     function StudentClassDelete(malop) {
         var result = confirm("Bạn có chắc chắn muốn xóa mã lớp :" + malop);
@@ -42,7 +153,7 @@
                 type: "GET", // GET / POST / DELETE
                 cache: false,
                 url: "/Home/StudentClassDelete",
-                data: data,  
+                data: data,
                 success: function (data) {
                     var res = data.ResponseCode;
                     var des = data.Description;

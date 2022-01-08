@@ -1,0 +1,32 @@
+﻿@model List<DataAccess.Student.DTO.StudentDTO>
+<style>
+    .paginate_button .active {
+        background-color: red;
+    }
+</style>
+<table class="table" id="table_id">
+    <thead>
+        <tr>
+            <th scope="col">Mã Lớp</th>
+            <th scope="col">Tên lớp</th>
+            <th scope="col">Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Count > 0)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.MaHS</td>
+                    <td>@item.TenHS</td>
+                    <td>
+                        <a href="/Home/Detail?MalopInput=@item.MaHS"><i class="fa fa-eye">Sửa</i> | </a>
+                        <a onclick="StudentClassDelete('@item.MaHS')"><i class="fa fa-trash">Xóa</i> </a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+<div id="pager"></div>

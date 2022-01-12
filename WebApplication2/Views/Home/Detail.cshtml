@@ -4,7 +4,17 @@
     ViewBag.Title = "Detail";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var text = Model.MaLop != null ? "Cập nhật lớp" : "Thêm lớp";
-    var isupdate = Model.MaLop != null ? 1 : 0;
+    
+    var isupdate = 0;
+   
+    if (Model.MaLop != null)
+    {
+        isupdate = 1;
+    }
+    else
+    {
+        isupdate = 0;
+    }
 }
 <h2>@text</h2>
 <div class="form-group">

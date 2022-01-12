@@ -1,4 +1,5 @@
 ﻿using DataAccess.Student.DTO;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -237,7 +238,7 @@ namespace WebApplication2.Controllers
                 var result = new DataAccess.Student.DAOImpl.StudentClassDAOImpl().StudentClass_GetList(string.Empty, 1, 10000);
                 listClass = result.listClass;
 
-                
+
             }
             catch (Exception ex)
             {
@@ -249,5 +250,134 @@ namespace WebApplication2.Controllers
         }
 
         #endregion
+
+        public void ExportExcel()
+        {
+            var model = new List<DataAccess.Student.DTO.StudentClassDTO>();
+            var TotalPage = 1;
+            try
+            {
+                //Bước 1: GetData
+                var modelresponse = new DataAccess.Student.DAOImpl.StudentClassDAOImpl().StudentClass_GetList(string.Empty, 1, 10000);
+                model = modelresponse.listClass;
+                //Bước 2: 
+                ExcelPackage ep = new ExcelPackage();
+                ExcelWorksheet Sheet = ep.Workbook.Worksheets.Add("Report");
+                Sheet.Cells["A1"].Value = "Mã Lớp";
+                Sheet.Cells["B1"].Value = "Tên Lớp";
+                int row = 2;// dòng bắt đầu ghi dữ liệu
+                var StatusName = "";
+
+                var str = string.Format("TEXT {0}{1}", "MyClass", "6A1");
+                if (model.Count > 0)
+                {
+                    foreach (var item in model)
+                    {
+                        Sheet.Cells[string.Format("A{0}", row)].Value = item.MaLop;
+                        Sheet.Cells[string.Format("B{0}", row)].Value = item.TenLOP;
+                        row++;
+                    }
+                }
+                Sheet.Cells["A:AZ"].AutoFitColumns();
+                Response.Clear();
+                Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                Response.AddHeader("content-disposition", "attachment; filename=" + "Report.xlsx");
+                Response.BinaryWrite(ep.GetAsByteArray());
+                Response.End();
+
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+        public JsonResult UpdateDiemHSByFile()
+        {
+            var index_fail = "";
+            var returnData = new ReturnData();
+            try
+            {
+                HttpPostedFileBase excelFile = Request.Files["UploadedFile"];
+
+                if (excelFile == null)
+                {
+                    returnData.ResponseCode = -3;
+                    returnData.Description = "File dữ không được trống!";
+                    return Json(returnData, JsonRequestBehavior.AllowGet);
+                }
+
+                var package = new ExcelPackage(excelFile.InputStream);
+
+                ExcelWorksheet ws = package.Workbook.Worksheets[1];
+
+                var listVoucherInfo = string.Empty;
+
+                for (int rw = 2; rw <= ws.Dimension.End.Row; rw++)
+                {
+                    if (ws.Cells[rw, 1].Value != null
+                        && ws.Cells[rw, 2].Value != null)
+                    {
+                        var malop = ws.Cells[rw, 1].Value != null ? ws.Cells[rw, 1].Value.ToString() : string.Empty;
+                        if (malop == null)
+                        {
+                            returnData.ResponseCode = -31;
+                            returnData.Description = "Mã lớp ở dòng thứ " + rw + "Không hợp lệ";
+                            return Json(returnData, JsonRequestBehavior.AllowGet);
+                        }
+                        var tenlop = ws.Cells[rw, 2].Value != null ? ws.Cells[rw, 2].Value.ToString() : string.Empty;
+
+                        if (tenlop == null)
+                        {
+                            returnData.ResponseCode = -31;
+                            returnData.Description = "Tên lớp ở dòng thứ " + rw + "Không hợp lệ";
+                            return Json(returnData, JsonRequestBehavior.AllowGet);
+                        }
+
+
+                        var result = new DataAccess.Student.DAOImpl.StudentClassDAOImpl().StudentClass_InsertUpdate(0, malop, tenlop);
+                        if (result <= 0)
+                        {
+                            var err_des = "";
+                            switch (result)
+                            {
+                                case -1:
+                                    err_des = "Mã Lớp sinh đã tồn tại"; break;
+                                default:
+                                    err_des = "Lỗi không xác định"; break;
+                            }
+
+                            index_fail += "Dòng :" + rw + "_" + "Lỗi:" + err_des + ",";
+                        }
+
+                        // var result = new DataAcess.StudentAPI.DALImpl.DiemHSImpl().DiemHs_Update(obj);
+                    }
+                }
+
+                if (string.IsNullOrEmpty(index_fail))
+                {
+                    returnData.ResponseCode = 1;
+                    returnData.Description = "Thêm mới thành công";
+                    return Json(returnData, JsonRequestBehavior.AllowGet);
+
+                }
+                else
+                {
+                    returnData.ResponseCode = -1;
+                    returnData.Description = "Lỗi tại các dòng :" + index_fail;
+                    return Json(returnData, JsonRequestBehavior.AllowGet);
+                }
+
+
+                return Json(returnData, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
     }
 }

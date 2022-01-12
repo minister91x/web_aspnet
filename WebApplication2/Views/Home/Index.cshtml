@@ -27,12 +27,21 @@
     <input type="email" class="form-control" id="txtMaLop" aria-describedby="emailHelp" placeholder="Enter UserName">
 </div>
 
+<div class="form-group">
+    <label for="exampleInputEmail1">Chọn chứa dữ liệu CLass</label>
+    <input type="file" class="form-control" id="UploadedFile">
+</div>
+
 <button type="button" id="btn_SearchClass" class="btn btn-primary">Tìm kiếm</button>
+<button type="button" id="btn_ShowPopup" class="btn btn-primary">Show Popup</button>
+<button type="button" id="btn_ExportExcel" class="btn btn-primary">ExportExcel</button>
+<button type="button" id="btn_ImportExcel" class="btn btn-primary">ImportExcel</button>
+
 
 <div id="listClassPartial">
     @Html.Action("DemoPartialView", "Home", new { MaLopInPut = "", CurrentPage = 1, RecordPerPage = 2 })
 </div>
-
+<div id="PopupDiv"></div>
 <script>
     $(document).ready(function () {
         $("#btn_InsertUpdate").click(function () {
@@ -44,17 +53,32 @@
 
         });
 
+        $("#btn_ImportExcel").click(function () {
+            UploadExcelFile();
+        });
+
+        $("#btn_ExportExcel").click(function () {
+            window.location.href = "/Home/ExportExcel";
+        });
+
+        $("#btn_ShowPopup").click(function () {
+            var str = "Bạn đang xem poup";
+            Common.ShowPoup(str);
+
+        });
+
         $("#btn_Login").click(function () {
 
             var username = $("#txtUserName").val();
             var password = $("#txtPassword").val();
 
             if (username == null || username == "") {
-                alert("Vui lòng nhập UserName");
+                // alert("Vui lòng nhập UserName");
+                Common.ShowPoup("Vui lòng nhập UserNam");
                 return;
             }
             if (password == null || password == "") {
-                alert("Vui lòng nhập password");
+                Common.ShowPoup("Vui lòng nhập password");
                 return;
             }
 
@@ -69,9 +93,10 @@
                 url: "/Home/Login",
                 data: data,    // multiple data sent using ajax
                 success: function (data) {
-                    var res = data.ResponseCode;
-                    var des = data.Description;
-                    alert(des);
+                    $("#PopupDiv").html(data);
+                    $("#myModalPopup").modal("show");
+                    // $("#myModalPopup").modal("hide"); ẩn popup
+
                 }
             });
 
@@ -79,6 +104,43 @@
         });
 
     });
+
+    function UploadExcelFile() {
+        var data = new FormData();
+        var files = $("#UploadedFile").get(0).files;
+        if (files.length > 0) {
+            data.append("UploadedFile", files[0]);
+        }
+
+        var Url = "/Home/UpdateDiemHSByFile";
+
+        $.ajax({
+            type: "POST",
+            url: Url,
+            data: data,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+
+                var responsecode = data.ResponseCode;
+                var des = data.Description;
+                if (responsecode > 0) {
+
+                    //var row_err = des.split('_')[0];
+                    //var text_err = des.split('_')[1];
+
+                    alert(des);
+                } else {
+
+                    alert(des);
+                }
+            },
+            error: function (data) {
+                //  utils.unloading();
+                console.log("error:" + JSON.stringify(data));
+            }
+        });
+    }
 
     function GetListClass() {
         var data = {
@@ -97,5 +159,7 @@
             }
         });
     }
+
+
 
 </script>

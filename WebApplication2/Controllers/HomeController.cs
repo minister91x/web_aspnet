@@ -13,9 +13,41 @@ namespace WebApplication2.Controllers
     {
         public ActionResult Index()
         {
+            try
+            {
+                //lấy session
+                var accountLogin = Session[Libs.Config.SessionAccount] != null
+                    ? (AccountDTO)Session[Libs.Config.SessionAccount] : new AccountDTO();
+                if (accountLogin.UserId <= 0)
+                {
+                    //Nếu mà object chưa có giá trị thì chứng tỏ là chưa có tài khoản nào đăng nhập
+                    return RedirectToAction("FormLogin", "Home");
+                }
+
+                ViewBag.IsAdmin = accountLogin.IsAdmin;
+                ViewBag.FullName = accountLogin.FullName;
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
             return View();
         }
 
+        public ActionResult FormLogin()
+        {
+            return View();
+        }
+
+
+        public ActionResult Logout()
+        {
+            Session.RemoveAll();
+            Session.Abandon();
+            return RedirectToAction("FormLogin", "Home");
+        }
         public ActionResult About()
         {
 
@@ -85,11 +117,19 @@ namespace WebApplication2.Controllers
             try
             {
                 var acc_impl = new DataAccess.Student.DAOImpl.AccountImpl();
+               
+                var pass_encrypt = Libs.Security.MD5(Password);
 
-                var result = acc_impl.Account_Login(UserName, Password);
+                var result = acc_impl.Account_Login(UserName, pass_encrypt);
                 returnData.ResponseCode = result;
                 if (result > 0)
                 {
+                    var currentUser = acc_impl.GetAccountByID(result);
+                    
+                    Session.Add(Libs.Config.SessionAccount, currentUser);
+                    
+                    //Session.Timeout = 120;
+
                     returnData.Description = "Login Thành công!";
                     return Json(returnData, JsonRequestBehavior.AllowGet);
                 }

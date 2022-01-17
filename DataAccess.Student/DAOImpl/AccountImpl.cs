@@ -1,4 +1,5 @@
 ﻿using DataAccess.Student.DAO;
+using DataAccess.Student.DTO;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -10,6 +11,40 @@ namespace DataAccess.Student.DAOImpl
 {
     public class AccountImpl : IAccount
     {
+        public List<AccountDTO> AccountDTOGetList()
+        {
+            var model = new List<AccountDTO>();
+            try
+            {
+                var sqlconn = ConnectDB.GetSqlConnection();
+                //ALT +F10
+                SqlCommand cmd = new SqlCommand("SP_GetListUser", sqlconn);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+               
+                var read = cmd.ExecuteReader();
+                while (read.Read())
+                {
+                    model.Add(new AccountDTO
+                    {
+                        UserId = Convert.ToInt32(read["UserId"].ToString()),
+                        UserName = read["UserName"].ToString(),
+                        FullName = read["FullName"].ToString(),
+                        IsAdmin = Convert.ToBoolean(read["IsAdmin"].ToString()),
+                    });
+                }
+
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            return model;
+        }
+
         public int Account_Login(string UserName, string Password)
         {
             var result = 0;
@@ -20,7 +55,7 @@ namespace DataAccess.Student.DAOImpl
                 var sqlconn = ConnectDB.GetSqlConnection();
                 //Bước 2 : gọi Store procedure 
                 // Bước 2.1 SqlCommand để gọi store 
-                SqlCommand cmd = new SqlCommand("Account_Login", sqlconn);
+                SqlCommand cmd = new SqlCommand("Sp_UserLogin", sqlconn);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@_UserName", UserName);
                 cmd.Parameters.AddWithValue("@_Password", Password);
@@ -35,6 +70,40 @@ namespace DataAccess.Student.DAOImpl
                 throw;
             }
             return result;
+        }
+
+        public AccountDTO GetAccountByID(int UserID)
+        {
+            var model = new AccountDTO();
+            try
+            {
+                var sqlconn = ConnectDB.GetSqlConnection();
+                //ALT +F10
+                SqlCommand cmd = new SqlCommand("Account_GetByID", sqlconn);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@_UserID", UserID);
+                var read = cmd.ExecuteReader();
+                while (read.Read())
+                {
+                    model = new AccountDTO
+                    {
+                        UserId = Convert.ToInt32(read["UserId"].ToString()),
+                        UserName = read["UserName"].ToString(),
+                        FullName = read["FullName"].ToString(),
+                        IsAdmin = Convert.ToBoolean(read["IsAdmin"].ToString()),
+                    };
+                }
+
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            return model;
         }
     }
 }

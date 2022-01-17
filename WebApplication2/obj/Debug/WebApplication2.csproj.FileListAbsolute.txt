@@ -57,3 +57,5 @@ C:\Users\ad\source\repos\WebApplication2\WebApplication2\obj\Debug\WebApplicatio
 C:\Users\ad\source\repos\WebApplication2\WebApplication2\obj\Debug\WebApplication2.dll
 C:\Users\ad\source\repos\WebApplication2\WebApplication2\obj\Debug\WebApplication2.pdb
 C:\Users\ad\source\repos\WebApplication2\WebApplication2\bin\EPPlus.dll
+C:\Users\ad\source\repos\WebApplication2\WebApplication2\bin\Libs.dll
+C:\Users\ad\source\repos\WebApplication2\WebApplication2\bin\Libs.pdb

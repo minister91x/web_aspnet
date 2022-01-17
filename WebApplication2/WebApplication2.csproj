@@ -124,6 +124,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CommonController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
@@ -178,6 +179,10 @@
     <Content Include="Views\Home\ListStudentPartial.cshtml" />
     <Content Include="Views\Home\StudentInsertUpdate.cshtml" />
     <Content Include="Views\Common\PopupPartial.cshtml" />
+    <Content Include="Views\Home\FormLogin.cshtml" />
+    <Content Include="Views\Account\GrantUser.cshtml" />
+    <Content Include="Views\Account\ListUserPartial.cshtml" />
+    <Content Include="Views\Account\ManagerUser.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -199,6 +204,10 @@
     <ProjectReference Include="..\DataAccess.Student\DataAccess.Student.csproj">
       <Project>{ef6c702b-97d1-450d-95a3-e6f23bea8ad9}</Project>
       <Name>DataAccess.Student</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Libs\Libs.csproj">
+      <Project>{5a187847-c9c3-4ee0-a15f-7fc62df30daf}</Project>
+      <Name>Libs</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

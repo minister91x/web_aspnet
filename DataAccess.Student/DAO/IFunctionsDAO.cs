@@ -7,12 +7,8 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Student.DAO
 {
-   public interface IAccount
+   public interface IFunctionsDAO
     {
-        int Account_Login(string UserName, string Password);
-
-        AccountDTO GetAccountByID(int UserID);
-
-        List<AccountDTO> AccountDTOGetList();
+        List<Functions> FunctionsGetList();
     }
 }

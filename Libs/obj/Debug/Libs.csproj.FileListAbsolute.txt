@@ -1,0 +1,6 @@
+C:\Users\ad\source\repos\WebApplication2\Libs\bin\Debug\Libs.dll
+C:\Users\ad\source\repos\WebApplication2\Libs\bin\Debug\Libs.pdb
+C:\Users\ad\source\repos\WebApplication2\Libs\obj\Debug\Libs.csprojAssemblyReference.cache
+C:\Users\ad\source\repos\WebApplication2\Libs\obj\Debug\Libs.csproj.CoreCompileInputs.cache
+C:\Users\ad\source\repos\WebApplication2\Libs\obj\Debug\Libs.dll
+C:\Users\ad\source\repos\WebApplication2\Libs\obj\Debug\Libs.pdb

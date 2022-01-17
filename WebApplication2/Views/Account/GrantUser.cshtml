@@ -1,0 +1,43 @@
+﻿
+@{
+    ViewBag.Title = "GrantUser";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model List<DataAccess.Student.DTO.Functions>
+<h2>GrantUser</h2>
+<table class="table" id="table_id">
+    <thead>
+        <tr>
+            <th scope="col">FunctionID</th>
+            <th scope="col">FunctionName</th>
+            <th scope="col">View</th>
+            <th scope="col">Insert</th>
+            <th scope="col">Update</th>
+            <th scope="col">Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Count > 0)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.FunctionID</td>
+                    <td>@item.FunctionName</td>
+                    <td>
+                        <input type="checkbox" />
+                    </td>
+                    <td>
+                        <input type="checkbox" />
+                    </td>
+                    <td>
+                        <input type="checkbox" />
+                    </td>
+                    <td>
+                        <input type="checkbox" />
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

@@ -1,0 +1,75 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>FormLogin</title>
+    <script src="~/Scripts/jquery-3.4.1.js?v=@DateTime.Now.Ticks"></script>
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/Common.js"></script>
+</head>
+<body>
+    <div class="form-group">
+        <label for="exampleInputEmail1">UserName</label>
+        <input type="email" class="form-control" id="txtUserName" aria-describedby="emailHelp" placeholder="Enter UserName">
+    </div>
+    <div class="form-group">
+        <label for="exampleInputPassword1">Password</label>
+        <input type="password" class="form-control" id="txtPassword" placeholder="Password">
+    </div>
+
+    <button type="button" id="btn_Login" class="btn btn-primary">Login</button>
+
+    <div id="PopupDiv"></div>
+</body>
+</html>
+<script>
+    $(document).ready(function () {
+        $("#btn_Login").click(function () {
+
+            var username = $("#txtUserName").val();
+            var password = $("#txtPassword").val();
+
+            if (username == null || username == "") {
+                // alert("Vui lòng nhập UserName");
+                Common.ShowPoup("Vui lòng nhập UserNam");
+                return;
+            }
+            if (password == null || password == "") {
+                Common.ShowPoup("Vui lòng nhập password");
+                return;
+            }
+
+            var data = {
+                UserName: username,
+                Password: password
+            };
+
+            $.ajax({
+                type: "GET", // GET / POST / DELETE
+                cache: false,
+                url: "/Home/Login",
+                data: data,    // multiple data sent using ajax
+                success: function (data) {
+
+                    if (data.ResponseCode > 0) {
+                        window.location.href = "/Home/Index";
+                    } else {
+                        Common.ShowPoup(data.Description);
+                    }
+
+                }
+            });
+
+
+        });
+    });
+</script>

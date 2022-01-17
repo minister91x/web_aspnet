@@ -3,10 +3,11 @@
 }
 
 @model List<DataAccess.Student.DTO.StudentDTO>
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-
-</div>
+    <div class="jumbotron">
+        <h4>UserID : @ViewBag.IsAdmin </h4>
+        <h4>FullName : @ViewBag.FullName</h4>
+        <a href="/Home/Logout">LogOut</a>
+    </div>
 
 
 <div class="form-group">

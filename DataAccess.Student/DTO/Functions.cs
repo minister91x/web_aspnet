@@ -12,5 +12,7 @@ namespace DataAccess.Student.DTO
         public string FunctionName { get; set; }
         public string ActionName { get; set; }
         public string Url { get; set; }
+
+        public int IsDisPlay { get; set; }
     }
 }

@@ -15,6 +15,6 @@ namespace DataAccess.Student.DTO
         public string Email { get; set; }
         public string Address { get; set; }
 
-        public bool IsAdmin { get; set; }
+        public int IsAdmin { get; set; }
     }
 }

@@ -183,6 +183,7 @@
     <Content Include="Views\Account\GrantUser.cshtml" />
     <Content Include="Views\Account\ListUserPartial.cshtml" />
     <Content Include="Views\Account\ManagerUser.cshtml" />
+    <Content Include="Views\Common\MenuPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

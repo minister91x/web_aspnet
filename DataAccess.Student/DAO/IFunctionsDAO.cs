@@ -10,5 +10,6 @@ namespace DataAccess.Student.DAO
    public interface IFunctionsDAO
     {
         List<Functions> FunctionsGetList();
+        int UserFunction_InSert(UserFunction userFunction);
     }
 }

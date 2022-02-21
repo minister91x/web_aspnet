@@ -2,9 +2,11 @@
 @{
     ViewBag.Title = "GrantUser";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var userID = Request.QueryString["UserIDInput"] ?? "0";
 }
 @model List<DataAccess.Student.DTO.Functions>
 <h2>GrantUser</h2>
+<button class="btn btn-success" onclick="SaveUserFunction()">Save</button>
 <table class="table" id="table_id">
     <thead>
         <tr>
@@ -19,25 +21,89 @@
     <tbody>
         @if (Model != null && Model.Count > 0)
         {
-            foreach (var item in Model)
+            for (int i = 0; i < Model.Count; i++)
             {
+
+                var item = Model[i];
                 <tr>
                     <td>@item.FunctionID</td>
                     <td>@item.FunctionName</td>
                     <td>
-                        <input type="checkbox" />
+                        <input type="hidden" value="@item.FunctionID" id="txtFunctionID_@i" />
+                        <input type="checkbox" id="chkIsView_@i" />
                     </td>
                     <td>
-                        <input type="checkbox" />
+                        <input type="checkbox" id="chkIsInsert_@i" />
                     </td>
                     <td>
-                        <input type="checkbox" />
+                        <input type="checkbox" id="chkIsUpdate_@i" />
                     </td>
                     <td>
-                        <input type="checkbox" />
+                        <input type="checkbox" id="chkIsDelete_@i" />
                     </td>
                 </tr>
             }
         }
     </tbody>
 </table>
+<script>
+    function SaveUserFunction() {
+
+        var funtionCount = '@Model.Count';
+        var lstFunctionID = "";
+        var lstIsView = "";
+        var lstIsInsert = "";
+        var lstIsUpdate = "";
+        var lstIsDelete= "";
+        for (var i = 0; i < parseInt(funtionCount, 10); i++) {
+            lstFunctionID += $("#txtFunctionID_"+i).val()+ "_";
+            lstIsView += $("#chkIsView_" + i).is(":checked") == true ? 1 + "_" : 0 + "_";
+            lstIsInsert += $("#chkIsInsert_" + i).is(":checked") == true ? 1 + "_" : 0 + "_";
+            lstIsUpdate += $("#chkIsUpdate_" + i).is(":checked") == true ? 1 + "_" : 0 + "_";
+            lstIsDelete += $("#chkIsDelete_" + i).is(":checked") == true ? 1 + "_" : 0 + "_";
+        }
+        if (lstFunctionID != null && lstFunctionID != "") {
+            lstFunctionID = lstFunctionID.substr(0, lstFunctionID.length - 1);
+        }
+
+        if (lstIsView != null && lstIsView != "") {
+            lstIsView = lstIsView.substr(0, lstIsView.length - 1);
+        }
+
+        if (lstIsInsert != null && lstIsInsert != "") {
+            lstIsInsert = lstIsInsert.substr(0, lstIsInsert.length - 1);
+        }
+
+        if (lstIsUpdate != null && lstIsUpdate != "") {
+            lstIsUpdate = lstIsUpdate.substr(0, lstIsUpdate.length - 1);
+        }
+
+        if (lstIsDelete != null && lstIsDelete != "") {
+            lstIsDelete = lstIsDelete.substr(0, lstIsDelete.length - 1);
+        }
+
+        var data = {
+
+            UserID: '@userID',
+            lstFunctionID: lstFunctionID,
+            lstIsView    :lstIsView     ,
+            lstIsInsert  :lstIsInsert   ,
+            lstIsUpdate  :lstIsUpdate   ,
+            lstIsDelete  :lstIsDelete
+        };
+
+        console.log("lstFunctionID:" + lstFunctionID);
+
+        $.ajax({
+            type: "GET", // GET / POST / DELETE
+            cache: false,
+            url: "/Account/SetGrantUser",
+            data: data,
+            success: function (data) {
+                $("#listClassPartial").html(data);
+            }
+        });
+    }
+
+
+</script>

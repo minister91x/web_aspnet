@@ -3,11 +3,11 @@
 }
 
 @model List<DataAccess.Student.DTO.StudentDTO>
-    <div class="jumbotron">
-        <h4>UserID : @ViewBag.IsAdmin </h4>
-        <h4>FullName : @ViewBag.FullName</h4>
-        <a href="/Home/Logout">LogOut</a>
-    </div>
+<div class="jumbotron">
+    <h4>UserID : @ViewBag.IsAdmin </h4>
+    <h4>FullName : @ViewBag.FullName</h4>
+    <a href="/Home/Logout">LogOut</a>
+</div>
 
 
 <div class="form-group">
@@ -37,7 +37,7 @@
 <button type="button" id="btn_ShowPopup" class="btn btn-primary">Show Popup</button>
 <button type="button" id="btn_ExportExcel" class="btn btn-primary">ExportExcel</button>
 <button type="button" id="btn_ImportExcel" class="btn btn-primary">ImportExcel</button>
-
+<a href="http://localhost:44352/account/ManagerUser">Danh sách tài khoản</a>
 
 <div id="listClassPartial">
     @Html.Action("DemoPartialView", "Home", new { MaLopInPut = "", CurrentPage = 1, RecordPerPage = 2 })

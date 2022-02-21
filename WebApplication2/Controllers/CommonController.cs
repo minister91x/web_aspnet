@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataAccess.Student.DTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -19,6 +20,38 @@ namespace WebApplication2.Controllers
             ViewBag.Mesenger = msg;
 
             return PartialView();
+        }
+
+        public ActionResult MenuPartial()
+        {
+            var lstFunction = new List<Functions>();
+            try
+            {
+                //lấy session
+                var accountLogin = Session[Libs.Config.SessionAccount] != null
+                    ? (AccountDTO)Session[Libs.Config.SessionAccount] : new AccountDTO();
+                if (accountLogin.UserId <= 0)
+                {
+                    //Nếu mà object chưa có giá trị thì chứng tỏ là chưa có tài khoản nào đăng nhập
+                    return RedirectToAction("FormLogin", "Home");
+                }
+
+
+                lstFunction = new DataAccess.Student.DAOImpl.FunctionsDAOImpl().FunctionsGetList();
+                foreach (var item in lstFunction)
+                {
+
+                }
+                var UserId = accountLogin.UserId;
+
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+            return PartialView(lstFunction);
         }
     }
 }

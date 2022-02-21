@@ -21,22 +21,22 @@ namespace DataAccess.Student.DAOImpl
                 SqlCommand cmd = new SqlCommand("SP_GetListUser", sqlconn);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
-               
+
                 var read = cmd.ExecuteReader();
                 while (read.Read())
                 {
                     model.Add(new AccountDTO
                     {
-                        UserId = Convert.ToInt32(read["UserId"].ToString()),
-                        UserName = read["UserName"].ToString(),
-                        FullName = read["FullName"].ToString(),
-                        IsAdmin = Convert.ToBoolean(read["IsAdmin"].ToString()),
+                        UserId = read["UserID"] != null ? Convert.ToInt32(read["UserID"].ToString()) : 0,
+                        UserName = read["UserName"] != null ? read["UserName"].ToString() : "",
+                        FullName = read["FullName"] != null ? read["FullName"].ToString() : "",
+                       // IsAdmin = read["IsAdmin"] != null ? Convert.ToInt32(read["IsAdmin"].ToString()) : 0,
                     });
                 }
 
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
                 throw;
@@ -91,7 +91,7 @@ namespace DataAccess.Student.DAOImpl
                         UserId = Convert.ToInt32(read["UserId"].ToString()),
                         UserName = read["UserName"].ToString(),
                         FullName = read["FullName"].ToString(),
-                        IsAdmin = Convert.ToBoolean(read["IsAdmin"].ToString()),
+                        IsAdmin = Convert.ToInt32(read["IsAdmin"].ToString()),
                     };
                 }
 

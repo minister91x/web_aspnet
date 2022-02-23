@@ -35,11 +35,21 @@ namespace WebApplication2.Controllers
 
         public ActionResult GrantUser(int UserIDInput)
         {
-            var model = new List<DataAccess.Student.DTO.Functions>();
+            var model = new List<DataAccess.Student.DTO.Function_ByUserID>();
             try
 
             {
-                model = new DataAccess.Student.DAOImpl.FunctionsDAOImpl().FunctionsGetList();
+                //lấy session
+                var accountLogin = Session[Libs.Config.SessionAccount] != null
+                    ? (AccountDTO)Session[Libs.Config.SessionAccount] : new AccountDTO();
+                if (accountLogin.UserId <= 0)
+                {
+                    //Nếu mà object chưa có giá trị thì chứng tỏ là chưa có tài khoản nào đăng nhập
+                    return RedirectToAction("FormLogin", "Home");
+                }
+
+                var UserId = accountLogin.UserId;
+                model = new DataAccess.Student.DAOImpl.FunctionsDAOImpl().GrantUser_ListFunctionByUserID(UserId);
             }
             catch (Exception ex)
             {

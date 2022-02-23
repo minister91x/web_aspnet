@@ -1,1 +1,11 @@
-﻿
+﻿@model List<DataAccess.Student.DTO.UserFunctionByUserID>
+@if (Model != null && Model.Count > 0)
+{
+    foreach (var item in Model)
+    {
+        
+            <li><a href="@item.Url">@item.FunctionName</a></li>
+        
+
+    }
+}

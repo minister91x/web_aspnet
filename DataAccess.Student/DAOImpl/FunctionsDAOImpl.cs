@@ -46,7 +46,9 @@ namespace DataAccess.Student.DAOImpl
             return model;
         }
 
-      public  int UserFunction_InSert(UserFunction userFunction)
+
+
+        public int UserFunction_InSert(UserFunction userFunction)
         {
             var result = 0;
             try
@@ -79,5 +81,85 @@ namespace DataAccess.Student.DAOImpl
 
             return result;
         }
+
+        public List<UserFunctionByUserID> ListFunctionByUserID(int UserID)
+        {
+            var model = new List<UserFunctionByUserID>();
+            try
+            {
+                var sqlconn = ConnectDB.GetSqlConnection();
+                //ALT +F10
+                SqlCommand cmd = new SqlCommand("SP_UserFunction_Getlist", sqlconn);
+
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                SqlParameter parameter = new SqlParameter("@_UserID", UserID);
+                cmd.Parameters.Add(parameter);
+
+                var read = cmd.ExecuteReader();
+                while (read.Read())
+                {
+                    model.Add(new UserFunctionByUserID
+                    {
+                        FunctionName = read["FunctionName"].ToString(),
+                        ActionName = read["ActionName"].ToString(),
+                        Url = read["Url"].ToString(),
+                    });
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+            return model;
+        }
+
+        public List<UserFunctionByUserID> ListUserFunctionByUserID(int UserID)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Function_ByUserID> GrantUser_ListFunctionByUserID(int UserID)
+        {
+            var model = new List<Function_ByUserID>();
+            try
+            {
+                var sqlconn = ConnectDB.GetSqlConnection();
+                //ALT +F10
+                SqlCommand cmd = new SqlCommand("SP_GrantUser_GetlistFunction_ByUserID", sqlconn);
+
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                SqlParameter parameter = new SqlParameter("@_UserID", UserID);
+                cmd.Parameters.Add(parameter);
+
+                var read = cmd.ExecuteReader();
+                while (read.Read())
+                {
+                    model.Add(new Function_ByUserID
+                    {
+                        FunctionName = read["FunctionName"].ToString(),
+                        FunctionID = Convert.ToInt32(read["FunctionID"].ToString()),
+                        IsDelete = Convert.ToBoolean(read["IsDelete"].ToString()) ? 1 : 0,
+                        IsInsert = Convert.ToBoolean(read["IsInsert"].ToString()) ? 1 : 0,
+                        IsUpdate = Convert.ToBoolean(read["IsUpdate"].ToString()) ? 1 : 0,
+                        IsView = Convert.ToBoolean(read["IsView"].ToString()) ? 1 : 0
+                    });
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+            return model;
+        }
+
+
     }
 }

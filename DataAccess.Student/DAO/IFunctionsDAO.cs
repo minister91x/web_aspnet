@@ -11,5 +11,9 @@ namespace DataAccess.Student.DAO
     {
         List<Functions> FunctionsGetList();
         int UserFunction_InSert(UserFunction userFunction);
+
+        List<UserFunctionByUserID> ListUserFunctionByUserID(int UserID);
+
+        List<Function_ByUserID> GrantUser_ListFunctionByUserID(int UserID);
     }
 }

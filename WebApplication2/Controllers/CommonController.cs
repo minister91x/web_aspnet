@@ -24,7 +24,7 @@ namespace WebApplication2.Controllers
 
         public ActionResult MenuPartial()
         {
-            var lstFunction = new List<Functions>();
+            var lstFunction = new List<UserFunctionByUserID>();
             try
             {
                 //lấy session
@@ -36,14 +36,8 @@ namespace WebApplication2.Controllers
                     return RedirectToAction("FormLogin", "Home");
                 }
 
-
-                lstFunction = new DataAccess.Student.DAOImpl.FunctionsDAOImpl().FunctionsGetList();
-                foreach (var item in lstFunction)
-                {
-
-                }
                 var UserId = accountLogin.UserId;
-
+                lstFunction = new DataAccess.Student.DAOImpl.FunctionsDAOImpl().ListFunctionByUserID(UserId);
 
             }
             catch (Exception ex)

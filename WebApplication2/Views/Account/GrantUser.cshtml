@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     var userID = Request.QueryString["UserIDInput"] ?? "0";
 }
-@model List<DataAccess.Student.DTO.Functions>
+@model List<DataAccess.Student.DTO.Function_ByUserID>
 <h2>GrantUser</h2>
 <button class="btn btn-success" onclick="SaveUserFunction()">Save</button>
 <table class="table" id="table_id">
@@ -30,16 +30,24 @@
                     <td>@item.FunctionName</td>
                     <td>
                         <input type="hidden" value="@item.FunctionID" id="txtFunctionID_@i" />
-                        <input type="checkbox" id="chkIsView_@i" />
+                        <input type="checkbox" id="chkIsView_@i" @(item.IsView == 1 ? "checked" : "") />
                     </td>
                     <td>
-                        <input type="checkbox" id="chkIsInsert_@i" />
+                        @*@if (item.IsInsert == 1)
+                        {
+                            <input type="checkbox" id="chkIsInsert_@i" checked />
+                        }
+                        else
+                        {
+                            <input type="checkbox" id="chkIsInsert_@i" />
+                        }*@
+                        <input type="checkbox" id="chkIsInsert_@i" @(item.IsInsert == 1 ? "checked" : "")  />
                     </td>
                     <td>
-                        <input type="checkbox" id="chkIsUpdate_@i" />
+                        <input type="checkbox" id="chkIsUpdate_@i" @(item.IsUpdate == 1 ? "checked" : "")/>
                     </td>
                     <td>
-                        <input type="checkbox" id="chkIsDelete_@i" />
+                        <input type="checkbox" id="chkIsDelete_@i" @(item.IsDelete == 1 ? "checked" : "")/>
                     </td>
                 </tr>
             }

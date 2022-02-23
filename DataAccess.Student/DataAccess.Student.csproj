@@ -55,6 +55,7 @@
     <Compile Include="DTO\StudentClassDTO.cs" />
     <Compile Include="DTO\StudentDTO.cs" />
     <Compile Include="DTO\UserFunction.cs" />
+    <Compile Include="DTO\UserFunctionByUserID.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

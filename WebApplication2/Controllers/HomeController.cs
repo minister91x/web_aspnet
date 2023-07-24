@@ -13,27 +13,49 @@ namespace WebApplication2.Controllers
     {
         public ActionResult Index()
         {
-            try
-            {
-                //lấy session
-                var accountLogin = Session[Libs.Config.SessionAccount] != null
-                    ? (AccountDTO)Session[Libs.Config.SessionAccount] : new AccountDTO();
-                if (accountLogin.UserId <= 0)
-                {
-                    //Nếu mà object chưa có giá trị thì chứng tỏ là chưa có tài khoản nào đăng nhập
-                    return RedirectToAction("FormLogin", "Home");
-                }
+            //try
+            //{
+            //    //lấy session
+            //    var accountLogin = Session[Libs.Config.SessionAccount] != null
+            //        ? (AccountDTO)Session[Libs.Config.SessionAccount] : new AccountDTO();
+            //    if (accountLogin.UserId <= 0)
+            //    {
+            //        //Nếu mà object chưa có giá trị thì chứng tỏ là chưa có tài khoản nào đăng nhập
+            //        return RedirectToAction("FormLogin", "Home");
+            //    }
 
-                ViewBag.IsAdmin = accountLogin.IsAdmin;
-                ViewBag.FullName = accountLogin.FullName;
+            //    ViewBag.IsAdmin = accountLogin.IsAdmin;
+            //    ViewBag.FullName = accountLogin.FullName;
 
-            }
-            catch (Exception ex)
-            {
+            //}
+            //catch (Exception ex)
+            //{
 
-                throw;
-            }
+            //    throw;
+            //}
             return View();
+        }
+
+        public ActionResult Index1(string UserName)
+        {
+            return View();
+        }
+
+        public ActionResult PartiaViewDemo()
+        {
+            var model = new List<DemoModels>();
+            for (int i = 0; i < 10; i++)
+            {
+                model.Add(new DemoModels { Id = i, Name = "Số " + i });
+
+            }
+
+            var shipper = new Shipper();
+
+            shipper.BoxOfQuan = 10000;
+
+            ViewBag.Name = "QUÂN";
+            return PartialView(shipper);
         }
 
         public ActionResult FormLogin()
@@ -71,12 +93,17 @@ namespace WebApplication2.Controllers
             var TotalPage = 1;
             try
             {
-                var modelresponse = new DataAccess.Student.DAOImpl.StudentClassDAOImpl().StudentClass_GetList(MaLopInPut, CurrentPage, RecordPerPage);
-                if (modelresponse.TotalRecord > 0)
+
+                for (int i = 1; i <= 10; i++)
                 {
-                    model = modelresponse.listClass;
-                    TotalPage = modelresponse.TotalRecord % RecordPerPage == 0 ? modelresponse.TotalRecord / RecordPerPage : (modelresponse.TotalRecord / RecordPerPage) + 1;
+                    model.Add(new StudentClassDTO { MaLop = "Class00" + i, TenLOP = "Lớp học ASPNET MVC " + i });
                 }
+                //var modelresponse = new DataAccess.Student.DAOImpl.StudentClassDAOImpl().StudentClass_GetList(MaLopInPut, CurrentPage, RecordPerPage);
+                //if (modelresponse.TotalRecord > 0)
+                //{
+                //    model = modelresponse.listClass;
+                //    TotalPage = modelresponse.TotalRecord % RecordPerPage == 0 ? modelresponse.TotalRecord / RecordPerPage : (modelresponse.TotalRecord / RecordPerPage) + 1;
+                //}
 
                 ViewBag.CurrentPage = CurrentPage;
                 ViewBag.PageSize = RecordPerPage;
@@ -100,7 +127,9 @@ namespace WebApplication2.Controllers
                 //model = list.Count > 0 ? list.Where(s => s.MaLop == MalopInput).FirstOrDefault() : new  DataAccess.Student.DTO.StudentClassDTO();
                 if (!string.IsNullOrEmpty(MalopInput))
                 {
-                    model = new DataAccess.Student.DAOImpl.StudentClassDAOImpl().StudentClass_GetDetail(MalopInput);
+                    //model = new DataAccess.Student.DAOImpl.StudentClassDAOImpl().StudentClass_GetDetail(MalopInput);
+                    model.MaLop = MalopInput;
+
                 }
             }
             catch (Exception ex)
@@ -117,7 +146,7 @@ namespace WebApplication2.Controllers
             try
             {
                 var acc_impl = new DataAccess.Student.DAOImpl.AccountImpl();
-               
+
                 var pass_encrypt = Libs.Security.MD5(Password);
 
                 var result = acc_impl.Account_Login(UserName, pass_encrypt);
@@ -125,9 +154,9 @@ namespace WebApplication2.Controllers
                 if (result > 0)
                 {
                     var currentUser = acc_impl.GetAccountByID(result);
-                    
+
                     Session.Add(Libs.Config.SessionAccount, currentUser);
-                    
+
                     //Session.Timeout = 120;
 
                     returnData.Description = "Login Thành công!";
